@@ -6,7 +6,7 @@ Workstation 01 (wks01) | .5.100 |
 - Windows 10
 - Default gateway of 5.2 (LAN address of fw01)
 - Can access and/or ping Champlain.edu if no address conflicts occur
-Notes
+Notes from Today
 - Brush up on traceroute / tracert
 - Look more into powershell
 - Start the next labs before next class if schedule is free
