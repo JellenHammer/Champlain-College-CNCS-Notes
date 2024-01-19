@@ -1,0 +1,2 @@
+# ECAT Lab Renovation
+A student-maintained and oriented hands-on lab room with the goal of teaching high school students networking and system administration, culminating with the opportunity to take the Cisco Certified Network Associate (CCNA) certification exam.
