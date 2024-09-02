@@ -8,4 +8,4 @@ My name is Connor. I'm a double major in Networking & Cybersecurity + Digital Fo
 
 ## Where is my information stored?
 
-Most of my writing will be stored in the Wiki, however there will be files stored elsewhere over time.
+Most of my writing will be stored in the Wiki, however there will be files stored elsewhere over time. This includes course files (eg. Powershell and Bash scripts), which will be stored in their respective course directories.
