@@ -1,1 +1,0 @@
-﻿Get-Service | Where-Object {$_.Status -ilike "Stopped"} | Sort | Export-CSV -Path .\Services.csv                                                 
