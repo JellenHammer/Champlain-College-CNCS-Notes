@@ -6,7 +6,7 @@ param (
 [string] $browser
 )
 
-$notfounds = Get-Content C:\xampp\apache\logs\*.log | Select-String -Pattern $page | Select-String -Pattern $statusCode | Select-String -Pattern $browser
+$notfounds = Get-Content 'C:\Users\champuser\CNCS-Tech-Portfolio\Linux Automation and Scripting (SYS-320-03)\October 17\access.log'
 $notfounds2 = $notfounds -split " "
 $tableFull = @()
 $tableFull += [PSCustomObject]@{
@@ -16,7 +16,7 @@ $tableFull += [PSCustomObject]@{
         "Status Code" = $notfounds2 | Select-Object -index 8
         "Browser" = $notfounds2 | Select-Object -index 21
 }
-$tableFull
+ $tableFull | Format-Table
 
 $regex = [regex] "\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b"
 $IP_ADDR = $notfounds2 | Select-Object -index 0
@@ -30,3 +30,4 @@ for($i=0; $i -lt $ipsUnorganized.Count; $i++){
     $counts = $ipsoften | measure
     $counts | Select-Object Count
 }
+ Apache-Logs

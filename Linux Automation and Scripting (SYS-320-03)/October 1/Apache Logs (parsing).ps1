@@ -20,5 +20,7 @@ $tableFull += [PSCustomObject]@{
         "Browser" = $logsSplit | Select-Object -index 21
         "Referrer" = $logsSplit | Select-Object -index 10
 }
-$tableFull
+return $tableFull | Where-Object { $logsSplit.IP -ilike "10.*"
 }
+}
+Apache-Logs-Full $page $status $browser

@@ -1,22 +1,13 @@
-﻿$logins = Get-EventLog -LogName System -Message "User Log*"
-
-
+﻿function RiskUsers() {
+param ($days)
+$logins = Get-EventLog -LogName Security -InstanceID 4625 -After (Get-Date).AddDays($days) | Group-Object -property UserName | Where-Object {$_.Count -gt 1}
 $logintable = @()
-for($i=0; $i -lt $logins.Count; $i++){
-#Creating event property value
-$event = ""
-	if($logins[$i].InstanceID -eq "7001") {$event="Logon"}
-	if($logins[$i].InstanceID -eq "7002") {$event="Logoff"}
- 
-$user = $logins[$i].ReplacementStrings[1]
+$user = $logins.ReplacementStrings[1] 
 $logintable += [PSCustomObject]@{
 			
-# Time is no longer working for some odd reason.
-			"Time" = $logins[$i].Time
-			"ID" = $logins[$i].InstanceID
-			"Event" = $event;
+			"At Risk" = "Yes"
 			"User" = $user;
 			}
-}
 
+}
 $logintable

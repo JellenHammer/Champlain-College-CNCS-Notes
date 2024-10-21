@@ -5,6 +5,7 @@
 clear
 
 $Prompt  = "Please choose your operation:`n"
+$Prompt += "0 - Exit`n"
 $Prompt += "1 - List Enabled Users`n"
 $Prompt += "2 - List Disabled Users`n"
 $Prompt += "3 - Create a User`n"
@@ -13,7 +14,7 @@ $Prompt += "5 - Enable a User`n"
 $Prompt += "6 - Disable a User`n"
 $Prompt += "7 - Get Log-In Logs`n"
 $Prompt += "8 - Get Failed Log-In Logs`n"
-$Prompt += "9 - Exit`n"
+$Prompt += "9 - Get at risk users`n"
 
 
 
@@ -165,24 +166,28 @@ while($operation){
 
         Write-Host ($userLogins | Where-Object { $_.User -ilike "*$name"} | Format-Table | Out-String)
     }
+    }
+
 
 
      elseif($choice -eq 9){
-
-        $name = Read-Host -Prompt "Please enter the username for the user's failed login logs"
-        $chkUser = checkUser $name
-        if($chkUser -ne $false){
-        # TODO: Check the given username with the checkUser function.
-        $timeSince = Read-Host -Prompt "Please enter the number of days to search back."
-        $userLogins = getFailedLogins $timeSince
-        # TODO: Change the above line in a way that, the days 90 should be taken from the user
-
-        Write-Host ($userLogins | Where-Object { $_.User -ilike "*$name"} | Format-Table | Out-String)
-    }
-    # TODO: Create another choice "List at Risk Users" that
-    #              - Lists all the users with more than 10 failed logins in the last <User Given> days.  
-    #                (You might need to create some failed logins to test)
-    #              - Do not forget to update prompt and option numbers
+        #Not functional, I couldn't figure out how to get it to enumerate all users. It was working but is now prompting a replacementstrings error.
+        $days = Read-Host -Prompt "Please enter the number of days to search back."
+        $logins = Get-EventLog -LogName Security -InstanceID 4625 -After (Get-Date).AddDays($days) | Group-Object -property UserName | Where-Object {$_.Count -gt 1}
+        $logintable = @()
+        $user = $logins.ReplacementStrings[1] 
+        $logintable += [PSCustomObject]@{
+			
+			"At Risk" = "Yes"
+			"User" = $user;
+            }
+            $logintable
+            }
+       
+      elseif($choice -ne 1..9){
+      Write-Host "Please enter a valid input."
+      }
+ 
     
     # TODO: If user enters anything other than listed choices, e.g. a number that is not in the menu   
     #       or a character that should not be accepted. Give a proper message to the user and prompt again.
@@ -192,5 +197,3 @@ while($operation){
 
 
 
-
-}
