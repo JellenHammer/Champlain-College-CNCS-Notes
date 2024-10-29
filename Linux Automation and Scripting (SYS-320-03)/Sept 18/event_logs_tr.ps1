@@ -10,7 +10,7 @@ for($i=0; $i -lt $logins.Count; $i++){
 $event = ""
 	if($logins[$i].InstanceID -eq "7001") {$event="Logon"}
 	if($logins[$i].InstanceID -eq "7002") {$event="Logoff"}
- 
+
 $user_sid = $logins.ReplacementStrings[1]
 $Sec_ID = New-Object System.Security.Principal.SecurityIdentifier($user_sid)
 $user = $Sec_ID.Translate([System.Security.Principal.NTAccount])

@@ -178,7 +178,7 @@ while($operation){
         $userLogins = getFailedLogins $timeSince
         # TODO: Change the above line in a way that, the days 90 should be taken from the user
 
-        Write-Host ($userLogins | Format-Table | Out-String) | Group-Object -Property User
+        Write-Host ($userLogins| Format-Table | Out-String) | Group-Object -Property User | Where-Object {$_.Count -gt 1} 
             }
             }
        
