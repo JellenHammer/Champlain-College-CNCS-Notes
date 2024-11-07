@@ -1,6 +1,10 @@
-﻿function Apache-Logs-Full {
+﻿function Apache-Logs {
 
-$logsUnformatted = Get-Content C:\xampp\apache\logs\*.log
+$page = "index.html"
+$statusCode = "200"
+$browser = "chrome"
+
+$logsUnformatted = Get-Content C:\xampp\apache\logs\*.log | Select-String -Pattern $page | Select-String -Pattern $statusCode | Select-String -Pattern $browser
 $logsSplit = $logsUnformatted -split " "
 
 $tableFull = @()
@@ -17,4 +21,4 @@ $tableFull += [PSCustomObject]@{
 return $tableFull | Where-Object { $logsSplit.IP -ilike "10.*"
 }
 }
-Apache-Logs-Full
+Write-Host | Apache-Logs $page $status $browser

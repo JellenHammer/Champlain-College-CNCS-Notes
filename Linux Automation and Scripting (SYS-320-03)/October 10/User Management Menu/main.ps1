@@ -164,24 +164,22 @@ while($operation){
         $userLogins = getFailedLogins $timeSince
         # TODO: Change the above line in a way that, the days 90 should be taken from the user
 
-        Write-Host ($userLogins | Where-Object { $_.User -ilike "*$name"} | Format-Table | Out-String)
+        Write-Host ($userLogins | Where-Object { $_.User -ilike "*$name"} | Format-Table | Out-String) | Group-Object -Property User
     }
     }
 
 
 
      elseif($choice -eq 9){
-        #Not functional, I couldn't figure out how to get it to enumerate all users. It was working but is now prompting a replacementstrings error.
-        $days = Read-Host -Prompt "Please enter the number of days to search back."
-        $logins = Get-EventLog -LogName Security -InstanceID 4625 -After (Get-Date).AddDays($days) | Group-Object -property UserName | Where-Object {$_.Count -gt 1}
-        $logintable = @()
-        $user = $logins.ReplacementStrings[1] 
-        $logintable += [PSCustomObject]@{
-			
-			"At Risk" = "Yes"
-			"User" = $user;
+        $chkUser = checkUser $name
+        if($chkUser -ne $false){
+        # TODO: Check the given username with the checkUser function.
+        $timeSince = Read-Host -Prompt "Please enter the number of days to search back."
+        $userLogins = getFailedLogins $timeSince
+        # TODO: Change the above line in a way that, the days 90 should be taken from the user
+
+        Write-Host ($userLogins| Format-Table | Out-String) | Group-Object -Property User | Where-Object {$_.Count -gt 1} 
             }
-            $logintable
             }
        
       elseif($choice -ne 1..9){
