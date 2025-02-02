@@ -1,6 +1,6 @@
 Function dhcp-check {
 
-# This script is meant for systems with only one Ethernet adapter, like the SYS265 Workstation VM. Not necessarily meant for systems with WiFi adapters.
+### This script is meant for systems with one Ethernet adapter only, like the Workstation VM.
 
 
 # Writing intro text..
@@ -64,14 +64,16 @@ $InterfaceDNS = (Get-DnsClientServerAddress -InterfaceAlias $InterfaceAlias).Ser
 
 # Checking whether interface is using DHCP or not.
 
-If ((Get-NetIPInterface -InterfaceAlias $InterfaceAlias).DHCP -eq "Enabled") {$DHCP = "Yes, DHCP Configuration"} else {$DHCP = "No, Static Configuration"}
-# Getting DHCP lease times and converting to a more readable format.
+    If (((Get-NetIPInterface -InterfaceAlias $InterfaceAlias) | Where-Object {$_.AddressFamily -eq 'IPv4'} ).DHCP -eq "Enabled") {$DHCP = "Yes, DHCP Configuration"} else {$DHCP = "No, Static Configuration"}
+    # Getting DHCP lease times and converting to a more readable format.
 
-If ($DHCP -like "Yes*"){
-    $DHCPServer = ((Get-CimInstance Win32_NetworkAdapterConfiguration).DHCPServer |  Out-String).Trim()
-    $DHCPLeaseEnd = ((Get-NetIPAddress -InterfaceAlias $InterfaceAlias) | Where-Object {$_.AddressFamily -eq 'IPv4'}).ValidLifeTime
-    $DHCPLeaseEnd = (Get-Date).addticks($DHCPLeaseEnd.ticks)
-}
+    If ($DHCP -like "Yes, *"){
+        $DHCPServer = ((Get-CimInstance Win32_NetworkAdapterConfiguration).DHCPServer |  Out-String).Trim()
+        $DHCPLeaseEnd = ((Get-NetIPAddress -InterfaceAlias $InterfaceAlias) | Where-Object {$_.AddressFamily -eq 'IPv4'}).ValidLifeTime
+        $DHCPLeaseEnd = (Get-Date).addticks($DHCPLeaseEnd.ticks)
+    }
+
+    If ($DHCP -like "No,*") { $DHCPServer = "N/A" ; $DHCPLeaseEnd = "N/A"}
 }
 # Defining PSCustomObject List for General Host Information
 
